@@ -24,13 +24,18 @@ class Assignment3CdkServerStack(Stack):
 
         # Script in S3 as Asset
         webinitscriptasset = S3asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
+
+        # Get public subnets
+        public_subnets = cdk_assignment_vpc.select_subnets(
+            subnet_type=ec2.SubnetType.PUBLIC
+        ).subnets
         
         #-----------------------------------------------------------------------
         # Create an EC2 instance Web Server 1 in the public subnet of the VPC
         cdk_assignment_web_instance_1 = ec2.Instance(self, "cdk_assignment_web_instance_1", 
                                             vpc=cdk_assignment_vpc,
                                             # I added this line to specify the subnet type for the EC2 instance
-                                            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC), 
+                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[0]]),
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
@@ -55,7 +60,7 @@ class Assignment3CdkServerStack(Stack):
         cdk_assignment_web_instance_2 = ec2.Instance(self, "cdk_assignment_web_instance_2", 
                                             vpc=cdk_assignment_vpc,
                                             # I added this line to specify the subnet type for the EC2 instance
-                                            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC), 
+                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[1]]), 
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
