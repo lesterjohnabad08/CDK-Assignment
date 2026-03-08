@@ -21,7 +21,11 @@ class Assignment3CdkServerStack(Stack):
         InstanceRole = iam.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
 
         InstanceRole.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+
+        # Script in S3 as Asset
+        webinitscriptasset = S3asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
         
+        #-----------------------------------------------------------------------
         # Create an EC2 instance Web Server 1 in the public subnet of the VPC
         cdk_assignment_web_instance_1 = ec2.Instance(self, "cdk_assignment_web_instance_1", 
                                             vpc=cdk_assignment_vpc,
@@ -30,6 +34,23 @@ class Assignment3CdkServerStack(Stack):
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
+        
+        # Add the script as a user data command
+        asset_path = cdk_assignment_web_instance_1.user_data.add_s3_download_command(
+            bucket=webinitscriptasset.bucket,
+            bucket_key=webinitscriptasset.s3_object_key
+        )
+
+        # Userdata executes script from S3
+        cdk_assignment_web_instance_1.user_data.add_execute_file_command(
+            file_path=asset_path
+            )
+        webinitscriptasset.grant_read(cdk_assignment_web_instance_1.role)
+        
+        # Allow inbound HTTP traffic in security groups
+        cdk_assignment_web_instance_1.connections.allow_from_any_ipv4(ec2.Port.tcp(80))
+
+        #-----------------------------------------------------------------------
 
         # Create an EC2 instance Web Server 2 in the public subnet of the VPC
         cdk_assignment_web_instance_2 = ec2.Instance(self, "cdk_assignment_web_instance_2", 
@@ -39,11 +60,19 @@ class Assignment3CdkServerStack(Stack):
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
+        # Add the script as a user data command
+        asset_path = cdk_assignment_web_instance_2.user_data.add_s3_download_command(
+            bucket=webinitscriptasset.bucket,
+            bucket_key=webinitscriptasset.s3_object_key
+        )
 
-        # The code that defines your stack goes here
+        # Userdata executes script from S3
+        cdk_assignment_web_instance_2.user_data.add_execute_file_command(
+            file_path=asset_path
+            )
+        webinitscriptasset.grant_read(cdk_assignment_web_instance_2.role)
+        
+        # Allow inbound HTTP traffic in security groups
+        cdk_assignment_web_instance_2.connections.allow_from_any_ipv4(ec2.Port.tcp(80))
 
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "Assignment3CdkQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+         
