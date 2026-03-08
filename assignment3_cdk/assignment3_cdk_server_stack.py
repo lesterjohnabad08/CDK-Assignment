@@ -33,9 +33,8 @@ class Assignment3CdkServerStack(Stack):
         #-----------------------------------------------------------------------
         # Create an EC2 instance Web Server 1 in the public subnet of the VPC
         cdk_assignment_web_instance_1 = ec2.Instance(self, "cdk_assignment_web_instance_1", 
-                                            vpc=cdk_assignment_vpc,
-                                            # I added this line to specify the subnet type for the EC2 instance
-                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[0]]),
+                                            vpc=cdk_assignment_vpc,                                            
+                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[0]]),# this line is to specify the subnet type for the EC2 instance
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
@@ -58,9 +57,8 @@ class Assignment3CdkServerStack(Stack):
         #-----------------------------------------------------------------------
         # Create an EC2 instance Web Server 2 in the public subnet of the VPC
         cdk_assignment_web_instance_2 = ec2.Instance(self, "cdk_assignment_web_instance_2", 
-                                            vpc=cdk_assignment_vpc,
-                                            # I added this line to specify the subnet type for the EC2 instance
-                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[1]]), 
+                                            vpc=cdk_assignment_vpc,                                            
+                                            vpc_subnets=ec2.SubnetSelection(subnets=[public_subnets[1]]), # This line is to specify the subnet type for the EC2 instance
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
