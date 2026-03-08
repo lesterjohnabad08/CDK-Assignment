@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from assignment3_cdk.assignment3_cdk_server_stack import Assignment3CdkStack
+from assignment3_cdk.assignment3_cdk_server_stack import Assignment3CdkServerStack
 
 
 app = cdk.App()
-Assignment3CdkStack(app, "Assignment3CdkStack",
+Assignment3CdkServerStack(app, "Assignment3CdkServerStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
