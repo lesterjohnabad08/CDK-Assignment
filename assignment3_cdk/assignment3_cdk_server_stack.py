@@ -22,9 +22,20 @@ class Assignment3CdkServerStack(Stack):
 
         InstanceRole.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
         
-        # Create an EC2 instance
-        cdk_assignment_web_instance = ec2.Instance(self, "cdk_assignment_web_instance", 
+        # Create an EC2 instance Web Server 1 in the public subnet of the VPC
+        cdk_assignment_web_instance_1 = ec2.Instance(self, "cdk_assignment_web_instance_1", 
                                             vpc=cdk_assignment_vpc,
+                                            # I added this line to specify the subnet type for the EC2 instance
+                                            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC), 
+                                            instance_type=ec2.InstanceType("t2.micro"),
+                                            machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
+                                            role=InstanceRole)
+
+        # Create an EC2 instance Web Server 2 in the public subnet of the VPC
+        cdk_assignment_web_instance_2 = ec2.Instance(self, "cdk_assignment_web_instance_2", 
+                                            vpc=cdk_assignment_vpc,
+                                            # I added this line to specify the subnet type for the EC2 instance
+                                            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC), 
                                             instance_type=ec2.InstanceType("t2.micro"),
                                             machine_image=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2),
                                             role=InstanceRole)
