@@ -51,7 +51,6 @@ class Assignment3CdkServerStack(Stack):
         cdk_assignment_web_instance_1.connections.allow_from_any_ipv4(ec2.Port.tcp(80))
 
         #-----------------------------------------------------------------------
-
         # Create an EC2 instance Web Server 2 in the public subnet of the VPC
         cdk_assignment_web_instance_2 = ec2.Instance(self, "cdk_assignment_web_instance_2", 
                                             vpc=cdk_assignment_vpc,
