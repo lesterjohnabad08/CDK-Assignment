@@ -105,7 +105,7 @@ class Assignment3CdkServerStack(Stack):
             removal_policy=cdk.RemovalPolicy.DESTROY
         )
 
-        # allow inbound traffic on the default port (3306) of the RDS instance from both web servers
+        # allow inbound traffic on the default port (3306) of the RDS instance from Web Server Security Group
         DBinstance.connections.allow_default_port_from(webserverSG)
         
         
