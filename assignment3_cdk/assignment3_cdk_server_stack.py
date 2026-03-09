@@ -107,9 +107,9 @@ class Assignment3CdkServerStack(Stack):
 
         # allow inbound traffic on the default port (3306) of the RDS instance from both web servers
         DBinstance.connections.allow_default_port_from(webserverSG)
-        #DBinstance.connections.allow_default_port_from(cdk_assignment_web_instance_2)
         
-
+        
+        # Some of the references I used for this stack are as follows:
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_rds/README.html#starting-an-instance-database
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_rds/SubnetGroup.html
         # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_ec2/SecurityGroup.html
